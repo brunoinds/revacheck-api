@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WebSocket Client</title>
+  </head>
+  <body>
+    <h1>WebSocket Client</h1>
+    <div>
+      <label for="message">Message:</label>
+      <input type="text" id="message" />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+    <div id="messages"></div>
+    <script>
+      const ws = new WebSocket('ws://localhost:3000');
+      const messagesDiv = document.getElementById('messages');
+
+      ws.onopen = () => {
+        log('WebSocket connection opened');
+      };
+
+      ws.onmessage = (event) => {
+        log(`Received message: ${event.data}`);
+      };
+
+      ws.onclose = () => {
+        log('WebSocket connection closed');
+      };
+
+      function sendMessage() {
+        const message = document.getElementById('message').value;
+        ws.send(message);
+        log(`Sent message: ${message}`);
+        document.getElementById('message').value = '';
+      }
+
+      function log(message) {
+        const div = document.createElement('div');
+        div.textContent = message;
+        messagesDiv.appendChild(div);
+      }
+    </script>
+  </body>
+</html>
