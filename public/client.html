@@ -12,7 +12,7 @@
     </div>
     <div id="messages"></div>
     <script>
-      const ws = new WebSocket('ws://localhost:3000');
+      const ws = new WebSocket('ws://revacheck-api.vercel.app:3000');
       const messagesDiv = document.getElementById('messages');
 
       ws.onopen = () => {
