@@ -1,8 +1,6 @@
 import express from 'express';
 import WebSocket, { WebSocketServer } from 'ws';
 import path from 'path';
-import fs from 'fs';
-import mime from 'mime';
 
 const app = express();
 const server = app.listen(3000, () => {
@@ -13,31 +11,6 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-
-app.get('/app/:any*', (req, res) => {
-  const file = req.params.any + (req.params[0] || '');
-  const internalPaths = file.split('/');
-
-  if (internalPaths.length > 1 && internalPaths[0] === 'assets') {
-    const filePath = path.join(__dirname, 'public', file);
-    const mimeType = mime.getType(filePath);
-
-    if (!fs.existsSync(filePath)) {
-      res.status(404).send('File not found!');
-      return;
-    }
-
-    res.setHeader('Content-Type', mimeType);
-    res.sendFile(filePath);
-  } else {
-    const filePath = path.join(__dirname, 'public', 'index.html');
-    res.sendFile(filePath);
-  }
-});
-
-
 
 const wss = new WebSocketServer({ server });
 
