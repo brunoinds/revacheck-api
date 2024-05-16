@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf build && mkdir build && cd build && git clone https://github.com/brunoinds/revacheck-web.git && cd revacheck-web && npm install && npm run build-production && rm -rf ../../public && mkdir ../../public && cp -r ../revacheck-api/* ../../public && mv ../../public/* ../ && cd ../.. && mv build/public/* public && rm -rf build"
   },
   "author": "",
   "license": "ISC",
