@@ -52,15 +52,11 @@ wss.on('connection', (ws) => {
   });
 
 
-  console.log('New client connected!');
-
   ws.on('message', (data) => {
     const event = JSON.parse(data);
 
     if(event.type === 'register') {
       connections.find(c => c.ws === ws).id = event.id;
-      console.log(`Client registered with id: ${event.id}`);
-
 
       connections.forEach(c => {
         if (c.ws !== ws) {
@@ -91,6 +87,5 @@ wss.on('connection', (ws) => {
 
   ws.on('close', () => {
     const connection = connections.find(c => c.ws === ws);
-    console.log(`Client disconnected with id: ${connection.id}`);
   });
 });
