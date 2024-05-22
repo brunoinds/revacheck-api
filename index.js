@@ -3,6 +3,8 @@ import WebSocket, { WebSocketServer } from 'ws';
 import path from 'path';
 import fs from 'fs';
 import mime from 'mime';
+import {OneDriveBridge} from './src/drive/onedrive.js';
+import 'dotenv/config';
 
 const app = express();
 const server = app.listen(3000, () => {
@@ -15,6 +17,12 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+//Enable CORS from localhost and localhost:8100:
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8100');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 
 app.get('/app/:any*', (req, res) => {
   const file = req.params.any + (req.params[0] || '');
@@ -36,6 +44,19 @@ app.get('/app/:any*', (req, res) => {
     res.sendFile(filePath);
   }
 });
+
+
+app.get('/api/content-explorer/folders/:folderId', async (req, res) => {
+  try {
+    let responseFolder = (await OneDriveBridge.getItemsInFolder(req.params.folderId))
+    
+    responseFolder.files = responseFolder.files.filter((file) => file.original.file.mimeType.startsWith('application/pdf'));
+    res.json(responseFolder);
+  } catch (error) {
+    res.status(500).json({ error: error.message }); 
+  }
+});
+
 
 
 
