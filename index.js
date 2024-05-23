@@ -10,7 +10,6 @@ import 'dotenv/config';
 const app = express();
 const server = app.listen(3000, () => {
   console.log(`Server started on port ${server.address().port}`);
-  console.log(`Enviroment variables: REVACHECK_ONEDRIVE_INTRA_SECRET: ${process.env.REVACHECK_ONEDRIVE_INTRA_SECRET}`);
 });
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
